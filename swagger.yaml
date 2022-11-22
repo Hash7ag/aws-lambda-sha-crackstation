@@ -1,0 +1,51 @@
+openapi: 3.0.0
+info:
+  title: CrackStation API
+  description:
+    This is a sample API of cracking unsalted[SHA-1](https://en.wikipedia.org/wiki/SHA-1) and [SHA-2](https://en.wikipedia.org/wiki/SHA-2) (SHA-256) hashed text.
+    It is able to decrypt/crack/brute-force the ciphertext which its plaintext matches `^[A-Za-z0-9?!]{1,3}$` by a pre-generated dictionary.
+
+
+    [SHA](https://en.wikipedia.org/wiki/Secure_Hash_Algorithms) is a common hashing algorithm for online servers to store sensitive authentication information.
+    This project is showing how to crack or brute force unsalted hashes (passwords) easily if the password is too short.
+    Hopefully, it can improve general people's cybersecurity awareness.
+  version: 1.0.0
+servers:
+  - url: https://sn7xwtrevj.execute-api.us-east-1.amazonaws.com
+tags:
+  - name: Crack
+    description: The main API for CrackStation
+paths:
+  /decrypt:
+    get:
+      tags:
+        - Crack
+      summary: Decrypt ciphertext
+      description: Return plaintext if sent ciphertext is crackable
+      parameters:
+        - in: query
+          name: shaHash
+          required: true
+          schema:
+            type: string
+            minimum: 40
+          description: The unsalted SHA-1 or SHA-256 hashed text
+      responses:
+        '200':
+          description: Successfully crack
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cracked'
+        '400':
+          description: Query parameters (shaHash) not found
+        '404':
+          description: Unable to crack
+components:
+  schemas:
+    Cracked:
+      type: object
+      properties:
+        cde8100ab95d3255df14ba0723e723c895ab76dd4ecc1694af37b57ba159c61f:
+          type: string
+          example: a!Z
