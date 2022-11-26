@@ -36,16 +36,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Cracked'
-        '400':
-          description: Query parameters (shaHash) not found
-        '404':
-          description: Unable to crack
-components:
-  schemas:
-    Cracked:
       type: object
       properties:
         cde8100ab95d3255df14ba0723e723c895ab76dd4ecc1694af37b57ba159c61f:
           type: string
           example: a!Z
+        '400':
+          description: Path parameters not found
+        '404':
+          description: Non-crackable

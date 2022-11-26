@@ -22,8 +22,7 @@ def lambda_handler(event, context):
             "statusCode": 404,
             "body": json.dumps(
                 {
-                    "message": "Unable to crack.",
-                    para: None
+                    "message": "Non-crackable."
                 }
             )
         }
@@ -44,8 +43,7 @@ def lambda_handler(event, context):
                 "statusCode": 404,
                 "body": json.dumps(
                     {
-                        "message": "Unable to crack.",
-                        para: None
+                        "message": "Non-crackable."
                     }
                 )
             }
