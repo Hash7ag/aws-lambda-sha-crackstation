@@ -23,7 +23,7 @@ paths:
       summary: Decrypt ciphertext
       description: Return plaintext if sent ciphertext is crackable
       parameters:
-        - in: query
+        - in: path
           name: shaHash
           required: true
           schema:

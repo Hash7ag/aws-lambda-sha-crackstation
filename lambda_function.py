@@ -8,12 +8,12 @@ def lambda_handler(event, context):
     SHA2_FILE_KEY = "sha2-data.json"
     
     try:
-        para = event["queryStringParameters"]["shaHash"]
+        para = event["pathParameters"]["shaHash"]
     except:
         return {
             "statusCode": 400,
             "body": json.dumps(
-                { "message": "Query parameters (shaHash) not found." }
+                { "message": "Path parameters `/{shaHash}` not found." }
             )
         }
     
