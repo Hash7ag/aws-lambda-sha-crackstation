@@ -11,7 +11,7 @@ info:
     Hopefully, it can improve general people's cybersecurity awareness.
   version: 1.0.0
 servers:
-  - url: https://sn7xwtrevj.execute-api.us-east-1.amazonaws.com
+  - url: https://heamasxtoa.execute-api.us-east-1.amazonaws.com
 tags:
   - name: Crack
     description: The main API for CrackStation
