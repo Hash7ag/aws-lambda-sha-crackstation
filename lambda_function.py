@@ -1,11 +1,10 @@
 import ujson as json
 import boto3
 
+BUCKET_NAME = "s3-sha-crackstation"
+SHA_FILE_KEY = "data.json"
+
 def lambda_handler(event, context):
-    
-    BUCKET_NAME = "s3-sha-crackstation"
-    SHA1_FILE_KEY = "sha1-data.json"
-    SHA2_FILE_KEY = "sha2-data.json"
     
     try:
         para = event["pathParameters"]["shaHash"]
@@ -27,30 +26,34 @@ def lambda_handler(event, context):
             )
         }
     else:
-        s3 = boto3.resource("s3")
-        if len(para) == 40:
-            s3.Bucket(BUCKET_NAME).download_file(SHA1_FILE_KEY, f"/tmp/data.json")
-        else:
-            s3.Bucket(BUCKET_NAME).download_file(SHA2_FILE_KEY, f"/tmp/data.json")
-            
-        with open("/tmp/data.json", "r") as json_file:
-            data = json.loads(json_file.read())
+        s3_client = boto3.client("s3")
         
-        result = data.get(para)
+        s3_select = s3_client.select_object_content(
+            Bucket = BUCKET_NAME,
+            Key = SHA_FILE_KEY,
+            Expression = f"SELECT * FROM S3Object[*].sha[*] AS sha WHERE sha.ciphertext='{para}'",
+            ExpressionType = 'SQL',
+            InputSerialization = {"JSON": {"Type": "DOCUMENT"}},
+            OutputSerialization = {"JSON": {"RecordDelimiter": ","}}
+        )
         
-        if result == None:
-            return {
-                "statusCode": 404,
-                "body": json.dumps(
-                    {
-                        "message": "Non-crackable."
-                    }
-                )
-            }
-        else:
-            return {
-                'statusCode': 200,
-                'body': json.dumps(
-                    { para: result }
-                )
-            }
+        for evnt in s3_select["Payload"]:
+            if "Records" in evnt:
+                records = evnt["Records"]["Payload"].decode("utf-8")
+                records = json.loads(records[:-1])
+                
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps(
+                        { para: records["plaintext"] }
+                    )
+                }
+            else:
+                return {
+                    "statusCode": 404,
+                    "body": json.dumps(
+                        {
+                            "message": "Non-crackable."
+                        }
+                    )
+                }
