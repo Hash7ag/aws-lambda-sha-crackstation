@@ -11,6 +11,11 @@ def lambda_handler(event, context):
     except:
         return {
             "statusCode": 400,
+            "headers": {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET"
+            },
             "body": json.dumps(
                 { "message": "Path parameters `/{shaHash}` not found." }
             )
@@ -19,6 +24,11 @@ def lambda_handler(event, context):
     if len(para) not in [40, 64]:
         return {
             "statusCode": 404,
+            "headers": {
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET"
+            },
             "body": json.dumps(
                 {
                     "message": "Non-crackable."
@@ -44,6 +54,11 @@ def lambda_handler(event, context):
                 
                 return {
                     'statusCode': 200,
+                    "headers": {
+                        "Access-Control-Allow-Headers": "Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET"
+                    },
                     'body': json.dumps(
                         { para: records["plaintext"] }
                     )
@@ -51,6 +66,11 @@ def lambda_handler(event, context):
             else:
                 return {
                     "statusCode": 404,
+                    "headers": {
+                        "Access-Control-Allow-Headers": "Content-Type",
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "GET"
+                    },
                     "body": json.dumps(
                         {
                             "message": "Non-crackable."
